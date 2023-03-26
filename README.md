@@ -88,17 +88,43 @@ Based on such a new transmission structure, the function of reducing TCP connect
 
 ## How to run the app
 
-### Generate Proto directory:
+### Deploy MongoDB
 
 ```bash
-make gen
+kubectl apply -f ./k8s/mongodb
 ```
 
-### Start server and client:
+### Build Proto Files
 
 ```bash
-make server
-make client
+protoc -I=./proto --go-grpc_out=. ./proto/*.proto
 ```
 
-##### Tags: `gRPC`
+### Build Services
+
+```bash
+go clean --cache && go test -v -cover microservices/...
+go build -o authentication/authsvc authentication/main.go
+go build -o api/apisvc api/main.go
+```
+
+### Build Image
+
+```bash
+docker build -t microservices:v1 .
+docker inspect microservices:v1
+```
+
+### Deploy Services
+
+```bash
+kubectl apply -f ./k8s/services
+```
+
+### Visualize Logs
+
+```bash
+minikube dashboard
+```
+
+##### Tags: `gRPC` `MongoDB` `Microservice` `Kubernetes`
