@@ -121,6 +121,18 @@ docker inspect microservices:v1
 kubectl apply -f ./k8s/services
 ```
 
+### Generate EXTERNAL-IP
+
+```bash
+minikube tunnel
+```
+
+### Visualize EXTERNAL-IP
+
+```bash
+kubectl get svc api-service
+```
+
 ### Visualize Logs
 
 ```bash
